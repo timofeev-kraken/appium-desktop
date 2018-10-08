@@ -1,7 +1,7 @@
 import Framework from './framework';
 
 class JavaFramework extends Framework {
-
+  varName;
   get language () {
     return "java";
   }
@@ -31,6 +31,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
+import static com.deloitte.dnmobile.qa.automation.framework.Assertions.assertTrue;
+
 public class SampleTest {
 
   private ${cls} driver;
@@ -59,6 +61,9 @@ ${this.indent(code, 4)}
   }
 
   codeFor_findAndAssign (strategy, locator, localVar, isArray) {
+    const locator_array = JSON.stringify(locator).split('/');
+    const varName = locator_array[1].substr(0, locator_array[1].length - 1);
+    this.varName = varName;
     let suffixMap = {
       xpath: "XPath",
       'accessibility id': 'AccessibilityId',
@@ -73,9 +78,9 @@ ${this.indent(code, 4)}
       throw new Error(`Strategy ${strategy} can't be code-gened`);
     }
     if (isArray) {
-      return `List<MobileElement> ${localVar} = (MobileElement) driver.findElementsBy${suffixMap[strategy]}(${JSON.stringify(locator)});`;
+      return `List<MobileElement> ${varName} = (MobileElement) driver.findElementsBy${suffixMap[strategy]}("${varName}");`;
     } else {
-      return `MobileElement ${localVar} = (MobileElement) driver.findElementBy${suffixMap[strategy]}(${JSON.stringify(locator)});`;
+      return `MobileElement ${varName} = (MobileElement) driver.findElementBy${suffixMap[strategy]}("${varName}");`;
     }
   }
 
@@ -96,6 +101,14 @@ ${this.indent(code, 4)}
 
   codeFor_sendKeys (varName, varIndex, text) {
     return `${this.getVarName(varName, varIndex)}.sendKeys(${JSON.stringify(text)});`;
+  }
+
+  codeFor_text (varName, varIndex, text) {
+    return `at last`;
+  }
+
+  codeFor_assert (varName) {
+    return `assertTrue(${this.varName}.isDisplayed(), "Element with id [${this.varName}] is displayed");`;
   }
 
   codeFor_back () {

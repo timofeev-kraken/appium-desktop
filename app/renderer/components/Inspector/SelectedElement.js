@@ -25,7 +25,7 @@ export default class SelectedElement extends Component {
   }
 
   render () {
-    const {applyClientMethod, setFieldValue, sendKeys, selectedElement, sendKeysModalVisible, showSendKeysModal, 
+    const {applyClientMethod, setFieldValue, sendKeys, selectedElement, sendKeysModalVisible, showSendKeysModal,
       hideSendKeysModal, selectedElementId:elementId, sourceXML, elementInteractionsNotAvailable} = this.props;
     const {attributes, xpath} = selectedElement;
 
@@ -84,7 +84,7 @@ export default class SelectedElement extends Component {
     }
 
     return <div>
-      {elementInteractionsNotAvailable && <Row type="flex" gutter={10}> 
+      {elementInteractionsNotAvailable && <Row type="flex" gutter={10}>
         <Col>
           <Alert type="info" message="Interactions are not available for this element" showIcon />
         </Col>
@@ -95,6 +95,7 @@ export default class SelectedElement extends Component {
             <Button disabled={!elementId} icon={!elementInteractionsNotAvailable && !elementId && 'loading'} id='btnTapElement' onClick={() => applyClientMethod({methodName: 'click', elementId})}>Tap</Button>
             <Button disabled={!elementId} id='btnSendKeysToElement' onClick={() => showSendKeysModal()}>Send Keys</Button>
             <Button disabled={!elementId} id='btnClearElement' onClick={() => applyClientMethod({methodName: 'clear', elementId})}>Clear</Button>
+            <Button disabled={!elementId} id='btnWaitElement' onClick={() => applyClientMethod({methodName: 'assert', elementId})}>Assert</Button>
           </ButtonGroup>
         </Col>
       </Row>

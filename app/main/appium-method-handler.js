@@ -102,7 +102,7 @@ export default class AppiumMethodHandler {
       this.elementCache[el.value] = res;
       return res;
     });
-    
+
     return {variableName, variableType, strategy, selector, elements};
   }
 
@@ -114,10 +114,18 @@ export default class AppiumMethodHandler {
     if (elementId) {
       // Give the cached element a variable name (el1, el2, el3,...) the first time it's used
       cachedEl = this.elementCache[elementId];
+
+
+
       if (!cachedEl.variableName && cachedEl.variableType === 'string') {
         cachedEl.variableName = `el${this.elVariableCounter++}`;
       }
-      res = await cachedEl.el[methodName].apply(cachedEl.el, args);
+      if (cachedEl.el[methodName]) {
+        res = await cachedEl.el[methodName].apply(cachedEl.el, args);
+      } else {
+        res = await null;
+      }
+
     } else {
        // Specially handle the tap and swipe method
       if (methodName === 'tap') {
@@ -158,7 +166,7 @@ export default class AppiumMethodHandler {
   async executeMethod (methodName, args = [], skipScreenshotAndSource = false) {
     return await this._execute({methodName, args, skipScreenshotAndSource});
   }
-  
+
   async _getSourceAndScreenshot () {
     let source, sourceError, screenshot, screenshotError, windowSize, windowSizeError;
     try {
@@ -178,10 +186,10 @@ export default class AppiumMethodHandler {
       }
       screenshotError = e;
     }
-    
+
     try {
       windowSize = await this.driver.getWindowSize();
-      
+
     } catch (e) {
       if (e.status === 6) {
         throw e;
@@ -200,7 +208,7 @@ export default class AppiumMethodHandler {
 
     // Restart the variable counter
     this.elVariableCounter = 1;
-    this.elArrayVariableCounter = 1;   
+    this.elArrayVariableCounter = 1;
   }
 
   async close (reason, killedByUser=false) {

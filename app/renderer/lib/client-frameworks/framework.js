@@ -106,6 +106,14 @@ export default class Framework {
     throw new Error("Need to implement codeFor_tap");
   }
 
+  codeFor_assert () {
+    throw new Error("Need to implement codeFor_assert");
+  }
+
+  codeFor_text () {
+    throw new Error("Need to implement codeFor_doubleclick");
+  }
+
   codeFor_swipe () {
     throw new Error("Need to implement codeFor_tap");
   }
